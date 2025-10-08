@@ -1,3 +1,4 @@
+import CTA from "@/components/CTA";
 import FeatureSection from "@/components/FeatureSection";
 import HeroSection from "@/components/HeroSection";
 import MouseAnimation from "@/components/MouseAnimation";
@@ -15,6 +16,7 @@ export default function Home() {
       <PlatformShowcaseTab />
       <SocialProofStats />
       <Testimonial />
+      <CTA />
     </div>
   );
 }
