@@ -2,6 +2,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
+import { useConvexQuery } from "@/hooks/useConvexQuery";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import {
@@ -17,6 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import { Authenticated, Unauthenticated } from "convex/react";
 
 const sidebarItems = [
   {
@@ -44,6 +47,7 @@ const sidebarItems = [
 const DashboardLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const { data: draftPost } = useConvexQuery(api.posts.getUserDraft);
 
   return (
     <div className="min-h-screen bg-slate-700 text-white">
@@ -108,7 +112,7 @@ const DashboardLayout = ({ children }) => {
                   />
                   <span className="font-medium">{item.title}</span>
 
-                  {item.title === "Create Post" && true && (
+                  {item.title === "Create Post" && draftPost && (
                     <Badge
                       variant="secondary"
                       className="ml-auto text-xs bg-orange-500/20 text-orange-300 border-orange-500/20"
@@ -136,26 +140,30 @@ const DashboardLayout = ({ children }) => {
       </aside>
 
       <div className="ml-0 lg:ml-64">
-        <header className="fixed w-full top-0 right-0 z-30 bg-slate-800/80 backdrop-blur-md border-b border-slate-700">
-          {/* Mobile Menu */}
+        <Unauthenticated>
+          <header className="fixed w-full top-0 right-0 z-30 bg-slate-800/80 backdrop-blur-md border-b border-slate-700">
+            {/* Mobile Menu */}
 
-          <div className="flex items-center justify-between px-4 lg:px-8 py-4">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="lg:hidden"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
+            <div className="flex items-center justify-between px-4 lg:px-8 py-4">
+              <div className="flex items-center space-x-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  className="lg:hidden"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </div>
+              <div className="h-10 flex items-center space-x-4">
+                <UserButton />
+              </div>
             </div>
-            <div className="h-10 flex items-center space-x-4">
-              <UserButton />
-            </div>
-          </div>
-        </header>
-        <main className="mt-[72px]">{children}</main>
+          </header>
+        </Unauthenticated>
+        <main className="mt-[72px]">
+          <Authenticated>{children}</Authenticated>
+        </main>
       </div>
     </div>
   );
