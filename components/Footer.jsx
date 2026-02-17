@@ -6,7 +6,7 @@ const Footer = () => {
         <div className='max-w-7xl mx-auto text-center'>
             <p className='text-muted-foreground'>
                 Made with ❤️ by {" "}
-                <span className='text-foreground font-semibold'>Rishav</span>
+                <span className='text-foreground font-semibold'>Sahil</span>
             </p>
         </div>
     </footer>
